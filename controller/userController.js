@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { validationResult } from "express-validator";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
@@ -43,6 +44,13 @@ export const login = async (req, res) => {
 
     if (!user.isVerified)
       return res.status(400).json({ message: "Please verify your email." });
+
+    const token = jwt.sign({ id: user._id }, envConfig.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+    return res
+      .status(200)
+      .json({ message: "Login success.", data: user, token });
 
     return res.status(200).json({ message: "Login success.", data: user });
   } catch (error) {
@@ -90,4 +98,3 @@ export const updateUser = async (req, res) => {
     return res.status(500).json();
   }
 };
-

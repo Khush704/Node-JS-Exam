@@ -6,6 +6,7 @@ import {
   login,
   register,
 } from "../controller/userController.js";
+import userAuth from "../middleware/userAuth.js";
 
 const employeeRouter = Router();
 
@@ -13,15 +14,15 @@ const employeeRouter = Router();
 employeeRouter.post("/", register);
 
 //To Show All Employee Data
-employeeRouter.get("/", getAllUser);
+employeeRouter.get("/", userAuth, getAllUser);
 
 //To Login
 employeeRouter.post("/login", login);
 
 //To Delete
-employeeRouter.delete("/:id", deleteUser);
+employeeRouter.delete("/:id", userAuth, deleteUser);
 
 //To Update
-employeeRouter.patch("/:id", updateUser);
+employeeRouter.patch("/:id", userAuth, updateUser);
 
 export default employeeRouter;
